@@ -43,7 +43,31 @@ export const http = <T>(option: UniApp.RequestOptions) => {
             ...option,
             //请求成功
             success(res) {
-                resolve(res.data as Data<T>)
+                if (res.statusCode >= 200 && res.statusCode < 300) {
+                    resolve(res.data as Data<T>)
+                } else if (res.statusCode == 401) {
+                    //清理用户信息，去登录
+                    const memberStore = useMemberStore()
+                    memberStore.clearProfile()
+                    uni.navigateTo({
+                        url: '/pages/login/login'
+                    })
+                    reject(res)
+                } else {
+                    uni.showToast({
+                        title: (res.data as Data<T>).msg || '请求错误',
+                        icon: 'none'
+                    })
+                    reject(res)
+                }
+
+            },
+            fail(err) {
+                uni.showToast({
+                    title: '网络错误，换个网络试试',
+                    icon: 'none'
+                })
+                reject(err)
             }
         })
     })
