@@ -22,4 +22,17 @@ export const useMemberStore = defineStore('member', () => {
     setProfile,
     clearProfile,
   }
-})
+},
+  {
+    persist: {
+      storage: {
+        getItem(key) {
+          return uni.getStorageSync(key)
+        },
+        setItem(key, value) {
+          uni.setStorageSync(key, value)
+        }
+      }
+    }
+  },
+)
