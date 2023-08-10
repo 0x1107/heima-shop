@@ -9,3 +9,9 @@ export type BannerItem = {
     /** 跳转类型 */
     type: number
 }
+
+export type CategoryItem = {
+    id: string
+    name: string
+    icon: string
+}
