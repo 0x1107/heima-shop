@@ -11,3 +11,8 @@ node_modules
 dist
 .DS_Store
 *.local
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/codeStyles/codeStyleConfig.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/codeStyles/Project.xml
