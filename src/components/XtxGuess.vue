@@ -1,5 +1,17 @@
 <script setup lang="ts">
 //
+import { getHomeGuessAPI } from '@/services/home';
+import { onMounted } from 'vue';
+//获取裁你喜欢数据
+
+const getHomeGuessData = async () => {
+    const res = await getHomeGuessAPI()
+}
+
+onMounted(() => {
+    getHomeGuessData()
+})
+
 </script>
 
 <template>

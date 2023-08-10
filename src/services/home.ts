@@ -27,3 +27,11 @@ export const getHomeHotAPI = () => {
     url: '/home/hot/mutli'
   })
 }
+
+//首页热门推荐
+export const getHomeGuessAPI = () => {
+  return http<[]>({
+    method: 'GET',
+    url: '/home/goods/guessLike'
+  })
+}
