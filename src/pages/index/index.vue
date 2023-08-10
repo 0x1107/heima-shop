@@ -2,11 +2,13 @@
 
 import { getHomeBannerAPI } from '@/services/home'
 import { getHomeCategoryAPI } from '@/services/home'
+import { getHomeHotAPI } from '@/services/home'
 import { onLoad } from '@dcloudio/uni-app'
 import CustomNavbar from './components/CustomNavbar.vue'
 import CategoryPanel from './components/CategoryPanel.vue'
+import HotPannel from './components/HotPannel.vue'
 import { ref } from 'vue'
-import type { BannerItem } from '@/types/home'
+import type { BannerItem, HotItem } from '@/types/home'
 import type { CategoryItem } from '@/types/home'
 
 const bannerList = ref<BannerItem[]>([])
@@ -21,9 +23,16 @@ const getHomeCategoryData = async () => {
   categoryList.value = res.result
 }
 
+const hotList = ref<HotItem[]>([])
+const getHomeHotData = async () => {
+  const res = await getHomeHotAPI()
+  hotList.value = res.result
+}
+
 onLoad(() => {
   getHomeBannerData()
   getHomeCategoryData()
+  getHomeHotData()
 })
 
 </script>
@@ -32,6 +41,7 @@ onLoad(() => {
   <CustomNavbar />
   <XtxSwiper :list="bannerList" />
   <CategoryPanel :list="categoryList" />
+  <HotPannel :list="hotList" />
   <view class="index">index</view>
 </template>
 

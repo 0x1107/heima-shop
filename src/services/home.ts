@@ -19,3 +19,11 @@ export const getHomeCategoryAPI = () => {
     url: '/home/category/mutli'
   })
 }
+
+//首页热门推荐
+export const getHomeHotAPI = () => {
+  return http<[]>({
+    method: 'GET',
+    url: '/home/hot/mutli'
+  })
+}

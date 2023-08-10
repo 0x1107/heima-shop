@@ -15,3 +15,13 @@ export type CategoryItem = {
     name: string
     icon: string
 }
+
+
+export type HotItem = {
+    id: string
+    title: string
+    target: string
+    type: number
+    alt: string
+    pictures: string[]
+}
