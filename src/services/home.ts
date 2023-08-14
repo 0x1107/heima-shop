@@ -1,5 +1,6 @@
-import type { BannerItem } from '@/types/home'
+import type { BannerItem, guessItem, GuessItem } from '@/types/home'
 import { http } from '@/utils/http'
+import type { PageResult } from '@/types/global'
 
 //首页广告轮播图接口
 export const getHomeBannerAPI = (distributionSite = 1) => {
@@ -16,22 +17,22 @@ export const getHomeBannerAPI = (distributionSite = 1) => {
 export const getHomeCategoryAPI = () => {
   return http<[]>({
     method: 'GET',
-    url: '/home/category/mutli'
+    url: '/home/category/mutli',
   })
 }
 
 //首页热门推荐
 export const getHomeHotAPI = () => {
-  return http<[]>({
+  return http<PageResult<GuessItem>>({
     method: 'GET',
-    url: '/home/hot/mutli'
+    url: '/home/hot/mutli',
   })
 }
 
 //首页热门推荐
 export const getHomeGuessAPI = () => {
-  return http<[]>({
+  return http<PageResult<GuessItem>>({
     method: 'GET',
-    url: '/home/goods/guessLike'
+    url: '/home/goods/guessLike',
   })
 }
