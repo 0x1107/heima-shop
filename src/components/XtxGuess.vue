@@ -3,13 +3,29 @@
 import { getHomeGuessAPI } from '@/services/home';
 import { onMounted, ref } from 'vue'
 import type { GuessItem } from '@/types/home'
+import type { PageParams } from '@/types/global'
 //获取裁你喜欢数据
+
+//分页参数
+const pageParams: Required<PageParams> = {
+    page: 1,
+    pageSize: 10
+}
+
+const finish = ref(false)
 
 const guessList = ref<GuessItem[]>([])
 
 const getHomeGuessData = async () => {
-    const res = await getHomeGuessAPI()
-  guessList.value = res.result.items
+    if (finish.value) return uni.showToast({ title: '没有更多了', icon: 'none' })
+    const res = await getHomeGuessAPI(pageParams)
+    guessList.value.push(...res.result.items)
+    //页码累加
+    if (pageParams.page < res.result.pages) {
+        pageParams.page++
+    } else {
+        finish.value = true
+    }
 }
 
 onMounted(() => {
@@ -18,7 +34,7 @@ onMounted(() => {
 
 //暴露方法
 defineExpose({
-  getMore: getHomeGuessData,
+    getMore: getHomeGuessData,
 })
 
 </script>
@@ -30,10 +46,9 @@ defineExpose({
     </view>
     <view class="guess">
         <navigator class="guess-item" v-for="item in guessList" :key="item.id" :url="`/pages/goods/goods?id=4007498`">
-            <image class="image" mode="aspectFill"
-                :src='item.picture'></image>
+            <image class="image" mode="aspectFill" :src='item.picture'></image>
             <view class="name">
-              {{item.name}}
+                {{ item.name }}
             </view>
             <view class="price">
                 <text class="small">¥</text>
@@ -41,7 +56,7 @@ defineExpose({
             </view>
         </navigator>
     </view>
-    <view class="loading-text"> 正在加载... </view>
+    <view class="loading-text"> {{ finish ? '没有更多数据了' : '正在加载...' }} </view>
 </template>
 
 <style lang="scss">
