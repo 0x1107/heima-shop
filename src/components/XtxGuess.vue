@@ -12,6 +12,13 @@ const pageParams: Required<PageParams> = {
     pageSize: 10
 }
 
+//重置数据
+const resetData = () => {
+    pageParams.page = 1
+    guessList.value = []
+    finish.value = false
+}
+
 const finish = ref(false)
 
 const guessList = ref<GuessItem[]>([])
@@ -35,6 +42,7 @@ onMounted(() => {
 //暴露方法
 defineExpose({
     getMore: getHomeGuessData,
+    resetData: resetData
 })
 
 </script>

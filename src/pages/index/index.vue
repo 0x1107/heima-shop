@@ -45,7 +45,8 @@ const isTriggered = ref(false)
 //下拉刷新
 const refresherrefresh = async () => {
   isTriggered.value = true
-  await Promise.all([getHomeBannerData(), getHomeCategoryData(), getHomeHotData()])
+  guessRef.value?.resetData()
+  await Promise.all([getHomeBannerData(), getHomeCategoryData(), getHomeHotData(), guessRef.value?.getMore])
   isTriggered.value = false
 }
 
