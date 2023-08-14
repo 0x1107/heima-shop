@@ -10,6 +10,7 @@ import HotPannel from './components/HotPannel.vue'
 import { ref } from 'vue'
 import type { BannerItem, HotItem } from '@/types/home'
 import type { CategoryItem } from '@/types/home'
+import type { XtxGuessInstance } from '@/types/components'
 
 const bannerList = ref<BannerItem[]>([])
 const getHomeBannerData = async () => {
@@ -35,15 +36,20 @@ onLoad(() => {
   getHomeHotData()
 })
 
+const guessRef = ref<XtxGuessInstance>()
+const onScrollToLower = () => {
+  guessRef.value?.getMore()
+}
+
 </script>
 
 <template>
   <CustomNavbar />
-  <scroll-view class="scroll-view" scroll-y>
+  <scroll-view @scrolltolower='onScrollToLower' class="scroll-view" scroll-y>
     <XtxSwiper :list="bannerList" />
     <CategoryPanel :list="categoryList" />
     <HotPannel :list="hotList" />
-    <XtxGuess />
+    <XtxGuess ref='guessRef' />
   </scroll-view>
 </template>
 

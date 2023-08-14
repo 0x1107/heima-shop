@@ -16,6 +16,11 @@ onMounted(() => {
     getHomeGuessData()
 })
 
+//暴露方法
+defineExpose({
+  getMore: getHomeGuessData,
+})
+
 </script>
 
 <template>
