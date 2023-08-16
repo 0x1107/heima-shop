@@ -23,7 +23,7 @@ uni.setNavigationBarTitle({ title: currUrlMap!.title })
 
 const getHotRecommendData = async () => {
   const res = await getHotRecommendAPI(currUrlMap!.url)
-  console.log(res)
+  console.log(res.result.bannerPicture)
 }
 
 onLoad(() => {
