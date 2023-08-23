@@ -31,10 +31,7 @@ const subTypes = ref<(SubTypeItem & { finish?: boolean })[]>([])
 const activeIndex = ref(0)
 
 const getHotRecommendData = async () => {
-  const res = await getHotRecommendAPI(currUrlMap!.url, {
-    page: 30,
-    pageSize: 10
-  })
+  const res = await getHotRecommendAPI(currUrlMap!.url)
   bannerPicture.value = res.result.bannerPicture
   subTypes.value = res.result.subTypes
 }
