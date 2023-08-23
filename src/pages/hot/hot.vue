@@ -25,7 +25,7 @@ uni.setNavigationBarTitle({ title: currUrlMap!.title })
 
 const bannerPicture = ref('')
 //推荐选项
-const subTypes = ref<SubTypeItem[]>([])
+const subTypes = ref<(SubTypeItem & { finish?: boolean })[]>([])
 
 //高亮的下表
 const activeIndex = ref(0)
@@ -44,16 +44,15 @@ onLoad(() => {
 })
 
 
-const finish = ref(false)
-
 //滚动触底
 const onScrolltolower = async () => {
-  if (finish.value) return uni.showToast({ title: '没有更多了', icon: 'none' })
+
   const currsubTypes = subTypes.value[activeIndex.value]
+  if (currsubTypes.finish) return uni.showToast({ title: '没有更多了', icon: 'none' })
   if (currsubTypes.goodsItems.page < currsubTypes.goodsItems.pages) {
     currsubTypes.goodsItems.page++
   } else {
-    finish.value = true
+    currsubTypes.finish = true
     return
   }
 
@@ -96,7 +95,7 @@ const onScrolltolower = async () => {
           </view>
         </navigator>
       </view>
-      <view class="loading-text"> {{ finish ? '没有更多数据了' : '正在加载...' }} </view>
+      <view class="loading-text"> {{ item.finish ? '没有更多数据了' : '正在加载...' }} </view>
     </scroll-view>
   </view>
 </template>
