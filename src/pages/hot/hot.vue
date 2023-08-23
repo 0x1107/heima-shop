@@ -31,7 +31,10 @@ const subTypes = ref<SubTypeItem[]>([])
 const activeIndex = ref(0)
 
 const getHotRecommendData = async () => {
-  const res = await getHotRecommendAPI(currUrlMap!.url)
+  const res = await getHotRecommendAPI(currUrlMap!.url, {
+    page: 30,
+    pageSize: 10
+  })
   bannerPicture.value = res.result.bannerPicture
   subTypes.value = res.result.subTypes
 }
@@ -39,6 +42,28 @@ const getHotRecommendData = async () => {
 onLoad(() => {
   getHotRecommendData()
 })
+
+
+const finish = ref(false)
+
+//滚动触底
+const onScrolltolower = async () => {
+  if (finish.value) return uni.showToast({ title: '没有更多了', icon: 'none' })
+  const currsubTypes = subTypes.value[activeIndex.value]
+  if (currsubTypes.goodsItems.page < currsubTypes.goodsItems.pages) {
+    currsubTypes.goodsItems.page++
+  } else {
+    finish.value = true
+    return
+  }
+
+  const res = await getHotRecommendAPI(currUrlMap!.url, {
+    page: currsubTypes.goodsItems.page,
+    pageSize: currsubTypes.goodsItems.pageSize,
+    subType: currsubTypes.id
+  })
+  currsubTypes.goodsItems.items.push(...res.result.subTypes[activeIndex.value].goodsItems.items)
+}
 
 </script>
 
@@ -59,7 +84,7 @@ onLoad(() => {
     </view>
     <!-- 推荐列表 -->
     <scroll-view v-for="(item, index) in subTypes" :key="item.id" v-show="index === activeIndex" scroll-y
-      class="scroll-view">
+      class="scroll-view" @scrolltolower="onScrolltolower">
       <view class="goods">
         <navigator hover-class="none" class="navigator" v-for="goods in item.goodsItems.items" :key="goods.id"
           :url="`/pages/goods/goods?id=${goods.id}`">
@@ -71,7 +96,7 @@ onLoad(() => {
           </view>
         </navigator>
       </view>
-      <view class="loading-text">正在加载...</view>
+      <view class="loading-text"> {{ finish ? '没有更多数据了' : '正在加载...' }} </view>
     </scroll-view>
   </view>
 </template>
