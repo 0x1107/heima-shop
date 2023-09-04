@@ -78,7 +78,7 @@ const subCategoryList = computed(() => {
       </scroll-view>
     </view>
   </view>
-  <PageSkeleton></PageSkeleton>
+  <PageSkeleton v-else></PageSkeleton>
 </template>
 
 <style lang="scss">
