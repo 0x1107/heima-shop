@@ -1,8 +1,9 @@
 // AddressPanel.vue
 <script setup lang="ts">
+
 // 子调用父
 const emit = defineEmits<{
-    (event: 'close') => void
+    (event: 'close'): void
 }>()
 
 </script>
