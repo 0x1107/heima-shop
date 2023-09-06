@@ -5,6 +5,7 @@
 import { postLoginWxMinAPI } from '@/services/login'
 import { postLoginWxMinSimpleAPI } from '@/services/login'
 import { onLoad } from '@dcloudio/uni-app';
+import { useMemberStore } from '@/stores'
 
 // 获取Code
 
@@ -27,7 +28,14 @@ const getphonenumber: UniHelper.ButtonOnGetphonenumber = (ev) => {
 
 const simpleLogin = async () => {
   const res = await postLoginWxMinSimpleAPI('17661297963')
-  console.log(res)
+  console.log(res.result)
+  //保存用户信息
+  const memberStore = useMemberStore()
+  memberStore.setProfile(res.result)
+  uni.showToast({ icon: 'success', title: '登录成功' })
+  setTimeout(() => {
+    uni.switchTab({ url: '/pages/my/my' })
+  }, 500)
 }
 //
 </script>
