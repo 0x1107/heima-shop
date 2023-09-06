@@ -3,6 +3,7 @@
 <script setup lang="ts">
 
 import { postLoginWxMinAPI } from '@/services/login'
+import { postLoginWxMinSimpleAPI } from '@/services/login'
 import { onLoad } from '@dcloudio/uni-app';
 
 // 获取Code
@@ -23,6 +24,11 @@ const getphonenumber: UniHelper.ButtonOnGetphonenumber = (ev) => {
   })
   console.log(res)
 }
+
+const simpleLogin = async () => {
+  const res = await postLoginWxMinSimpleAPI('17661297963')
+  console.log(res)
+}
 //
 </script>
 
@@ -41,7 +47,7 @@ const getphonenumber: UniHelper.ButtonOnGetphonenumber = (ev) => {
           <text>其他登录方式</text>
         </view>
         <view class="options">
-          <button>
+          <button @tap="simpleLogin">
             <text class="icon icon-phone">模拟快捷登录</text>
           </button>
         </view>
