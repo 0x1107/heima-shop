@@ -10,7 +10,7 @@ import HotPannel from './components/HotPannel.vue'
 import { ref } from 'vue'
 import type { BannerItem, HotItem } from '@/types/home'
 import type { CategoryItem } from '@/types/home'
-import type { XtxGuessInstance } from '@/types/components'
+import type { useGuessList } from '@/composables/index'
 import PageSkeleton from '@/pages/index/components/PageSkeleton.vue'
 
 const bannerList = ref<BannerItem[]>([])
@@ -37,10 +37,8 @@ onLoad(async () => {
   isLoading.value = false
 })
 
-const guessRef = ref<XtxGuessInstance>()
-const scrolltolower = () => {
-  guessRef.value?.getMore()
-}
+//猜你喜欢
+const { guessRef, scrolltolower } = useGuessList()
 
 const isLoading = ref(false)
 
