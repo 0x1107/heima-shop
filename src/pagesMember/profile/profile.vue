@@ -2,7 +2,7 @@
 import { useMemberStore } from '@/stores/modules/member'
 import { getMemberProfileAPI, updateUserInfoAPI } from '@/services/profile'
 import { onLoad } from '@dcloudio/uni-app'
-import type { ProfileDetail, ProfileParams } from '@/types/member'
+import type { Gender, ProfileDetail, ProfileParams } from '@/types/member'
 import { ref } from 'vue';
 
 // 获取屏幕边界到安全区域距离
@@ -17,6 +17,8 @@ const getMemberProfileData = async () => {
   const res = await getMemberProfileAPI()
   profile.value = res.result
 }
+
+let fullLocationCode:[string, string, string] = ['', '', '']
 
 //更新头像
 const onAvatarChange = () => {
@@ -51,17 +53,39 @@ const onAvatarChange = () => {
 
 const onSubmit = async () => {
   const res = await updateUserInfoAPI({
-    nickname: profile.value?.nickname
+    nickname: profile.value?.nickname,
+    gender: profile.value.gender,
+    birthday: profile.value.birthday,
+    provinceCode:fullLocationCode.at(0),
+    cityCode:fullLocationCode.at(1),
+    countyCode:fullLocationCode.at(2),
+    profession: profile.value.profession
   })
   uni.showToast({
     icon: 'success',
-    title: '更新昵称成功'
+    title: '更新个人信息成功'
   })
 }
 
 onLoad(() => {
   getMemberProfileData()
 })
+
+const onGenderChange:UniHelper.RadioGroupOnChange = (ev) => {
+  // console.log(ev.detail.value)
+  profile.value.gender = ev.detail.value as Gender
+}
+
+const onBirthdayChange: UniHelper.PickerViewOnChange = (ev) => {
+  profile.value.birthday = ev.detail.value
+}
+
+const  onCityChange: UniHelper.RegionPickerOnChange = (ev) => {
+  console.log(ev.detail.code)
+  profile.value.fullLocation = ev.detail.value.join(' ')
+  fullLocationCode = ev.detail.code!
+}
+
 
 </script>
 
@@ -93,7 +117,7 @@ onLoad(() => {
         </view>
         <view class="form-item">
           <text class="label">性别</text>
-          <radio-group>
+          <radio-group @change='onGenderChange'>
             <label class="radio">
               <radio value="男" color="#27ba9b" :checked="profile?.gender === '男'" />
               男
@@ -106,21 +130,21 @@ onLoad(() => {
         </view>
         <view class="form-item">
           <text class="label">生日</text>
-          <picker class="picker" mode="date" start="1900-01-01" :end="new Date()" :value="profile?.birthday">
-            <view v-if="false">{{ profile?.birthday }}</view>
+          <picker class="picker" mode="date" start="1900-01-01" :end="new Date()" :value="profile?.birthday" @change='onBirthdayChange'>
+            <view v-if="profile.birthday != null">{{ profile?.birthday }}</view>
             <view class="placeholder" v-else>请选择日期</view>
           </picker>
         </view>
         <view class="form-item">
           <text class="label">城市</text>
-          <picker class="picker" mode="region" :value="profile?.fullLocation.split(' ')">
-            <view v-if="false">{{ profile?.fullLocation }}</view>
+          <picker class="picker" mode="region" :value="profile?.fullLocation.split(' ')" @change='onCityChange'>
+            <view v-if="profile.fullLocation">{{ profile?.fullLocation }}</view>
             <view class="placeholder" v-else>请选择城市</view>
           </picker>
         </view>
         <view class="form-item">
           <text class="label">职业</text>
-          <input class="input" type="text" placeholder="请填写职业" :value="profile?.profession" />
+          <input class="input" type="text" placeholder="请填写职业" v-model="profile!.profession" />
         </view>
       </view>
       <!-- 提交按钮 -->
